@@ -1,13 +1,11 @@
 "use strict";
 
 require("dotenv").config();
-
 const fs = require("fs");
-const Swagger2Postman = require("./converter.js");
 
 // convert swagger v2 to postman v1
+const Swagger2Postman = require("./lib/converter.js");
 const swaggerConverter = new Swagger2Postman();
-
 const swaggerFile = fs.readFileSync("swagger.json");
 const swaggerJson = JSON.parse(swaggerFile);
 const postmanJson = swaggerConverter.convert(swaggerJson);
@@ -60,7 +58,6 @@ transformer.convert(collection, options, function(error, result) {
 
 // sync postman team collection
 const axios = require("axios");
-
 const postmanEndpoint = `https://api.getpostman.com/collections/${process.env.COLLECTION_UID}`;
 const apiKey = process.env.API_KEY;
 const postmanCollectionV2 = require("./postman-v2.json");
