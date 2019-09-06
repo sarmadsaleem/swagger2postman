@@ -35,7 +35,7 @@ const options = {
   retainIds: true
 };
 
-transformer.convert(collection, options, function(error, result) {
+transformer.convert(collection, options, (error, result) => {
   if (error) {
     console.log("Postman transformation failed");
     return console.error(error);
@@ -71,14 +71,14 @@ axios({
   },
   data: postmanCollectionV2
 })
-  .then(function(response) {
+  .then(response => {
     response.status == 200
       ? console.log("Postman team account collection successfully updated")
       : console.log(
           "Something went wrong while updating Postman team account collection"
         );
   })
-  .catch(function(error) {
+  .catch(error => {
     console.log(
       "Something went wrong while updating Postman team account collection"
     );
