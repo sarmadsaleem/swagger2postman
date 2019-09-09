@@ -6,8 +6,7 @@ const fs = require("fs");
 // convert swagger v2 to postman v1
 const Swagger2Postman = require("./lib/converter.js");
 const swaggerConverter = new Swagger2Postman();
-const swaggerFile = fs.readFileSync("swagger.json");
-const swaggerJson = JSON.parse(swaggerFile);
+const swaggerJson = require("./swagger.json");
 const postmanJson = swaggerConverter.convert(swaggerJson);
 
 if (postmanJson.status === "passed") {
@@ -40,6 +39,21 @@ transformer.convert(collection, options, (error, result) => {
     console.log("Postman transformation failed");
     return console.error(error);
   }
+
+  // parameterize protocol and host
+  result.item[0].item.forEach(entry => {
+    entry.request.url.raw = entry.request.url.raw.replace(
+      "http",
+      "{{protocol}}"
+    );
+    entry.request.url.raw = entry.request.url.raw.replace(
+      "localhost:3000",
+      "{{host}}"
+    );
+    entry.request.url.host = ["{{host}}"];
+    entry.request.url.protocol = "{{protocol}}";
+    entry.request.url.port = "";
+  });
 
   console.log("Postman transformation succeeded");
   fs.writeFileSync(
