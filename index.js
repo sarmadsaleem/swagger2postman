@@ -41,19 +41,19 @@ transformer.convert(collection, options, (error, result) => {
   }
 
   // parameterize protocol and host
-  result.item[0].item.forEach(entry => {
+  result.item.forEach(e => e.item.forEach(entry => {
     entry.request.url.raw = entry.request.url.raw.replace(
-      "http",
+      /http/g,
       "{{protocol}}"
     );
     entry.request.url.raw = entry.request.url.raw.replace(
-      "localhost:3000",
+      /localhost:3000/g,
       "{{host}}"
     );
     entry.request.url.host = ["{{host}}"];
     entry.request.url.protocol = "{{protocol}}";
     entry.request.url.port = "";
-  });
+  }));
 
   console.log("Postman transformation succeeded");
   fs.writeFileSync(
